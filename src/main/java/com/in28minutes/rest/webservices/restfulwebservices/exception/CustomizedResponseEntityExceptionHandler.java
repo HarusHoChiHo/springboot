@@ -18,6 +18,16 @@ import com.in28minutes.rest.webservices.restfulwebservices.user.UserNotFoundExce
 @ControllerAdvice
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
+	
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(
+			MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		System.out.print("Total Errors: " + ex.getErrorCount() + " First Error: " + ex.getFieldError().getDefaultMessage());
+		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), "Total Errors: " + ex.getErrorCount() + " First Error: " + ex.getFieldError().getDefaultMessage(), request.getDescription(false));
+		
+		return new ResponseEntity<Object>(errorDetails, HttpStatus.BAD_REQUEST);
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<ErrorDetails> handleAllException(Exception ex, WebRequest request) throws Exception {
 		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
@@ -32,14 +42,4 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 		return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.NOT_FOUND);
 	}
 	
-	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(
-			MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-
-		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getFieldError().getDefaultMessage(), request.getDescription(false));
-		
-		
-		
-		return new ResponseEntity(errorDetails, HttpStatus.BAD_REQUEST);
-	}
 }
