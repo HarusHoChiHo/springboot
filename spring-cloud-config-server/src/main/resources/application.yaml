@@ -5,9 +5,11 @@ spring:
     config:
       server:
         git:
-          uri: git@github.com:HarusHoChiHo/springboot.git
-          search-paths:
-            - spring-cloud-config-server/git-localconfig-repo
+          uri: https://github.com/HarusHoChiHo/springboot.git
+          username: harushochiho
+          password: 9t7cm4rh
+          search-paths: spring-cloud-config-server
+          defaultLabel: springbootms
               
 
 server:
